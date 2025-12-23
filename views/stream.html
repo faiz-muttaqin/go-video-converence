@@ -1,0 +1,114 @@
+{{ if .NoStream }}
+
+<div id="nostream" class="error-container">
+	<div class="alert-card error">
+		<i class="bi bi-exclamation-triangle-fill alert-icon"></i>
+		<h3>Stream Not Found</h3>
+		<p>There is no active stream for this link.</p>
+		<p class="text-muted">Please check your link or join another stream room.</p>
+		<a href="/" class="btn-modern btn-primary mt-4">
+			<i class="bi bi-house-door"></i> Back to Home
+		</a>
+	</div>
+</div>
+
+{{ else }}
+
+<!-- Connection Error Alert -->
+<div id="nocon" class="connection-error">
+	<div class="alert-card error">
+		<i class="bi bi-wifi-off alert-icon"></i>
+		<h4>Connection Lost</h4>
+		<p>The connection to the server has been closed.</p>
+		<button class="btn-modern btn-danger" onclick="location.reload()">
+			<i class="bi bi-arrow-clockwise"></i> Refresh Page
+		</button>
+	</div>
+</div>
+
+<!-- No Streamers Alert -->
+<div id="noonestream" class="no-streamers">
+	<div class="info-card">
+		<i class="bi bi-broadcast alert-icon"></i>
+		<h4>Waiting for Streamers</h4>
+		<p>No one is streaming yet. Please wait for the streamer to join.</p>
+		<div class="loading-spinner mt-3"></div>
+	</div>
+</div>
+
+<!-- Video Grid Container for Viewers -->
+<div id="peers" class="video-grid-container viewer-mode">
+	<div class="video-grid" id="videos">
+		<!-- Remote videos will be added here -->
+	</div>
+</div>
+
+<!-- Viewer Control Bar -->
+<div class="control-bar viewer-controls" id="controlBar">
+	<div class="control-bar-content">
+		<div class="control-left">
+			<button class="control-btn" id="toggleVolume" title="Mute/Unmute">
+				<i class="bi bi-volume-up-fill"></i>
+			</button>
+		</div>
+		
+		<div class="control-center">
+			<button class="control-btn btn-danger-control" id="leaveStream" title="Leave Stream" onclick="window.location.href='/'">
+				<i class="bi bi-box-arrow-left"></i>
+				<span class="btn-label">Leave</span>
+			</button>
+		</div>
+		
+		<div class="control-right">
+			<button class="control-btn" id="toggleChat" title="Toggle Chat">
+				<i class="bi bi-chat-dots-fill"></i>
+				<span class="chat-badge" id="chatBadge" style="display: none;">0</span>
+			</button>
+			<button class="control-btn" id="toggleFullscreen" title="Fullscreen">
+				<i class="bi bi-fullscreen"></i>
+			</button>
+		</div>
+	</div>
+</div>
+
+<!-- Modern Chat Panel -->
+{{ template "chat" . }}
+
+<script>
+	let StreamWebsocketAddr = "{{.StreamWebsocketAddr}}"
+	let ChatWebsocketAddr = "{{.ChatWebsocketAddr}}"
+	let ViewerWebsocketAddr = "{{.ViewerWebsocketAddr}}"
+</script>
+<script src="/javascript/controls.js"></script>
+<script src="/javascript/stream.js"></script>
+<script src="/javascript/chat.js"></script>
+<script src="/javascript/viewer.js"></script>
+
+<script>
+// Fullscreen toggle
+document.getElementById('toggleFullscreen')?.addEventListener('click', function() {
+	if (!document.fullscreenElement) {
+		document.documentElement.requestFullscreen();
+		this.querySelector('i').className = 'bi bi-fullscreen-exit';
+	} else {
+		document.exitFullscreen();
+		this.querySelector('i').className = 'bi bi-fullscreen';
+	}
+});
+
+// Volume toggle
+document.getElementById('toggleVolume')?.addEventListener('click', function() {
+	const icon = this.querySelector('i');
+	const videos = document.querySelectorAll('video');
+	
+	if (icon.classList.contains('bi-volume-up-fill')) {
+		videos.forEach(v => v.muted = true);
+		icon.className = 'bi bi-volume-mute-fill';
+	} else {
+		videos.forEach(v => v.muted = false);
+		icon.className = 'bi bi-volume-up-fill';
+	}
+});
+</script>
+
+{{ end }}

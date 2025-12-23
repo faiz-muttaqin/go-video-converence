@@ -1,0 +1,58 @@
+<div id="chat" class="modern-chat-panel">
+    <div class="chat-header">
+        <div class="chat-title">
+            <i class="bi bi-chat-dots-fill"></i>
+            <span>Chat</span>
+            <span class="unread-badge" id="chat-alert"></span>
+        </div>
+        <button class="chat-close-btn" onclick="toggleChat()">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+    
+    <div class="chat-messages" id="log">
+        <!-- Messages will be appended here -->
+    </div>
+    
+    <div class="chat-input-container">
+        <form id="form" autocomplete="off">
+            <div class="chat-input-wrapper">
+                <input 
+                    class="chat-input" 
+                    id="msg" 
+                    type="text" 
+                    placeholder="Type a message..."
+                    maxlength="500"
+                />
+                <button class="chat-send-btn" id="chat-button" type="submit">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleChat() {
+    const chatPanel = document.getElementById('chat');
+    const chatBtn = document.getElementById('toggleChat');
+    const badge = document.getElementById('chatBadge');
+    
+    if (chatPanel.classList.contains('show')) {
+        chatPanel.classList.remove('show');
+        chatBtn.classList.remove('active');
+    } else {
+        chatPanel.classList.add('show');
+        chatBtn.classList.add('active');
+        if (badge) {
+            badge.style.display = 'none';
+            badge.textContent = '0';
+        }
+    }
+}
+
+// Toggle chat from control bar
+if (document.getElementById('toggleChat')) {
+    document.getElementById('toggleChat').addEventListener('click', toggleChat);
+}
+</script>

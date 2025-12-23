@@ -1,0 +1,98 @@
+<!-- Permission Alert -->
+<div id="noperm" class="permission-alert">
+	<div class="alert-card">
+		<i class="bi bi-camera-video-off-fill alert-icon"></i>
+		<h4>Camera and Microphone Access Required</h4>
+		<p>Please allow camera and microphone permissions to join the room.</p>
+		<p class="mt-2">Alternatively, you can join as a viewer:</p>
+		<a href="{{ .StreamLink }}" class="btn-modern btn-primary mt-3">
+			<i class="bi bi-eye"></i> Join as Viewer
+		</a>
+	</div>
+</div>
+
+<!-- Connection Error Alert -->
+<div id="nocon" class="connection-error">
+	<div class="alert-card error">
+		<i class="bi bi-wifi-off alert-icon"></i>
+		<h4>Connection Lost</h4>
+		<p>The connection to the server has been closed.</p>
+		<button class="btn-modern btn-danger" onclick="location.reload()">
+			<i class="bi bi-arrow-clockwise"></i> Refresh Page
+		</button>
+	</div>
+</div>
+
+<!-- No Participants Alert -->
+<div id="noone" class="no-participants">
+	<div class="info-card">
+		<i class="bi bi-people alert-icon"></i>
+		<h4>Waiting for Others</h4>
+		<p>You're the only one here. Invite others to join!</p>
+		<button class="btn-modern btn-primary" onclick="document.querySelector('[data-bs-toggle=dropdown]').click()">
+			<i class="bi bi-person-plus"></i> Invite Participants
+		</button>
+	</div>
+</div>
+
+<!-- Video Grid Container -->
+<div id="peers" class="video-grid-container">
+	<div class="video-grid" id="videos">
+		<div class="video-tile local-video-tile">
+			<video id="localVideo" class="video-element mirror" autoplay muted playsinline></video>
+			<div class="video-overlay">
+				<div class="participant-name">
+					<i class="bi bi-mic-fill"></i> You
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Bottom Control Bar -->
+<div class="control-bar" id="controlBar">
+	<div class="control-bar-content">
+		<div class="control-left">
+			<button class="control-btn" id="toggleAudio" title="Mute/Unmute">
+				<i class="bi bi-mic-fill"></i>
+			</button>
+			<button class="control-btn" id="toggleVideo" title="Stop/Start Video">
+				<i class="bi bi-camera-video-fill"></i>
+			</button>
+			<button class="control-btn" id="shareScreen" title="Share Screen">
+				<i class="bi bi-display"></i>
+			</button>
+		</div>
+		
+		<div class="control-center">
+			<button class="control-btn btn-danger-control" id="leaveRoom" title="Leave Room" onclick="window.location.href='/'">
+				<i class="bi bi-telephone-x-fill"></i>
+				<span class="btn-label">Leave</span>
+			</button>
+		</div>
+		
+		<div class="control-right">
+			<button class="control-btn" id="toggleChat" title="Toggle Chat">
+				<i class="bi bi-chat-dots-fill"></i>
+				<span class="chat-badge" id="chatBadge" style="display: none;">0</span>
+			</button>
+			<button class="control-btn" id="moreOptions" title="More Options">
+				<i class="bi bi-three-dots"></i>
+			</button>
+		</div>
+	</div>
+</div>
+
+<!-- Modern Chat Panel -->
+{{ template "chat" . }}
+
+<script>
+	let RoomWebsocketAddr = "{{.RoomWebsocketAddr}}"
+	let ChatWebsocketAddr = "{{.ChatWebsocketAddr}}"
+	let ViewerWebsocketAddr = "{{.ViewerWebsocketAddr}}"
+</script>
+<script src="/javascript/controls.js"></script>
+<script src="/javascript/peer.js"></script>
+<script src="/javascript/chat.js"></script>
+<script src="/javascript/viewer.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
